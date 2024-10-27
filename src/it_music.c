@@ -1950,7 +1950,7 @@ void Update(void)
 		UpdateSamples();
 }
 
-void Music_FillAudioBuffer(int16_t *buffer, int32_t numSamples)
+void IT_MixAudio(int16_t *buffer, int32_t numSamples)
 {
 	if (!Song.Playing)
 	{
@@ -1962,7 +1962,7 @@ void Music_FillAudioBuffer(int16_t *buffer, int32_t numSamples)
 		DriverMix(numSamples, buffer);
 }
 
-void Music_FillAudioBufferFloat(float *buffer, int32_t numSamples)
+void IT_MixAudioFloat(float *buffer, int32_t numSamples)
 {
 	if (!Song.Playing)
 	{
@@ -1974,7 +1974,7 @@ void Music_FillAudioBufferFloat(float *buffer, int32_t numSamples)
 		DriverMixFloat(numSamples, buffer);
 }
 
-bool Music_Init(int32_t mixingFrequency, int32_t mixingBufferSize)
+bool IT_InitMusic(int32_t mixingFrequency, int32_t mixingBufferSize)
 {
 	if (FirstTimeInit)
 	{
@@ -1983,7 +1983,7 @@ bool Music_Init(int32_t mixingFrequency, int32_t mixingBufferSize)
 	}
 	else
 	{
-		Music_Close();
+		IT_CloseDriver();
 	}
 
 	if (!SB16_InitDriver(mixingFrequency))
@@ -1992,19 +1992,19 @@ bool Music_Init(int32_t mixingFrequency, int32_t mixingBufferSize)
 	return true;
 }
 
-void Music_Close(void) // 8bb: added this
+void IT_CloseDriver(void) // 8bb: added this
 {
 	if (DriverClose != NULL)
 		DriverClose();
 }
 
-void Music_InitTempo(void)
+void IT_InitMusicTempo(void)
 {
 	if (DriverSetTempo != NULL)
 		DriverSetTempo((uint8_t)Song.Tempo);
 }
 
-void Music_Stop(void)
+void IT_StopPlayback(void)
 {
 	Song.Playing = false;
 
@@ -2043,11 +2043,11 @@ void Music_Stop(void)
 		Song.ProcessTick = Song.CurrentSpeed = Song.Header.InitialSpeed;
 		Song.Tempo = Song.Header.InitialTempo;
 
-		Music_InitTempo();
+		IT_InitMusicTempo();
 	}
 }
 
-void Music_StopChannels(void)
+void IT_StopPlaybackChannels(void)
 {
 	hostChn_t *hc = hChn;
 	for (int32_t i = 0; i < MAX_HOST_CHANNELS; i++, hc++)
@@ -2068,7 +2068,7 @@ void Music_PreviousOrder(void)
 
 	if (Song.CurrentOrder > 0)
 	{
-		Music_StopChannels();
+		IT_StopPlaybackChannels();
 		
 		Song.CurrentOrder -= 2;
 		Song.ProcessOrder = Song.CurrentOrder;
@@ -2086,7 +2086,7 @@ void Music_NextOrder(void)
 
 	if (Song.CurrentOrder < 255)
 	{
-		Music_StopChannels();
+		IT_StopPlaybackChannels();
 
 		Song.ProcessRow = 0xFFFE;
 		Song.CurrentTick = 1;
@@ -2095,12 +2095,12 @@ void Music_NextOrder(void)
 	}
 }
 
-void Music_PlaySong(uint16_t order)
+void IT_PlaySong(uint16_t order)
 {
 	if (!Song.Loaded)
 		return;
 
-	Music_Stop();
+	IT_StopPlayback();
 
 	MIDITranslate(NULL, sChn, MIDICOMMAND_START); // 8bb: this will reset channel filters
 
@@ -2212,9 +2212,9 @@ void Music_ReleaseAllSamples(void)
 		Music_ReleaseSample(i);
 }
 
-void Music_FreeSong(void) // 8bb: added this
+void IT_FreeMusic(void) // 8bb: added this
 {
-	Music_Stop();
+	IT_StopPlayback();
 
 	Music_ReleaseAllPatterns();
 	Music_ReleaseAllSamples();

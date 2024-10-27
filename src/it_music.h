@@ -61,17 +61,17 @@ void PitchSlideUp(hostChn_t *hc, slaveChn_t *sc, int16_t SlideValue);
 void PitchSlideDown(hostChn_t *hc, slaveChn_t *sc, int16_t SlideValue);
 
 void Update(void);
-void Music_FillAudioBuffer(int16_t *buffer, int32_t numSamples);
-void Music_FillAudioBufferFloat(float *buffer, int32_t numSamples);
+void IT_MixAudio(int16_t *buffer, int32_t numSamples);
+void IT_MixAudioFloat(float *buffer, int32_t numSamples);
 
-bool Music_Init(int32_t mixingFrequency, int32_t mixingBufferSize);
-void Music_Close(void); // 8bb: added this
-void Music_Stop(void);
-void Music_StopChannels(void);
+bool IT_InitMusic(int32_t mixingFrequency, int32_t mixingBufferSize);
+void IT_CloseDriver(void); // 8bb: added this
+void IT_StopPlayback(void);
+void IT_StopPlaybackChannels(void);
 void Music_PreviousOrder(void);
 void Music_NextOrder(void);
-void Music_PlaySong(uint16_t order);
-void Music_InitTempo(void);
+void IT_PlaySong(uint16_t order);
+void IT_InitMusicTempo(void);
 
 bool Music_AllocateSample(uint32_t sample, uint32_t length);
 bool Music_AllocateRightSample(uint32_t sample, uint32_t length); // 8bb: added this
@@ -82,4 +82,4 @@ bool Music_AllocatePattern(uint32_t pattern, uint32_t length);
 void Music_ReleasePattern(uint32_t pattern);
 void Music_ReleaseAllPatterns(void);
 int32_t Music_GetActiveVoices(void); // 8bb: added this
-void Music_FreeSong(void); // 8bb: added this
+void IT_FreeMusic(void); // 8bb: added this

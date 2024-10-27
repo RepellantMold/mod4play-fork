@@ -428,9 +428,9 @@ static void unpackPatt(uint8_t *dst, uint16_t inn, uint16_t len, uint8_t antChn)
 	}
 }
 
-void freeMusic(void)
+void IT_FreeMusic(void)
 {
-	stopMusic();
+	FT2_StopMusic();
 	freeAllInstr();
 	freeAllPatterns();
 
@@ -894,12 +894,12 @@ loadError2:
 	return false;
 }
 
-bool loadMusicFromData(const uint8_t *data, uint32_t dataLength) // .XM/.MOD/.FT
+bool FT2_LoadMusicfromData(const uint8_t *data, uint32_t dataLength) // .XM/.MOD/.FT
 {
 	uint16_t i;
 	songHeaderTyp h;
 
-	freeMusic();
+	IT_FreeMusic();
 	setFrqTab(false);
 
 	moduleLoaded = false;
@@ -1027,7 +1027,7 @@ bool startMusic(void)
 	return true;
 }
 
-void stopMusic(void)
+void FT2_StopMusic(void)
 {
 	pauseMusic();
 
@@ -1037,17 +1037,17 @@ void stopMusic(void)
 	resumeMusic();
 }
 
-void startPlaying(void)
+void FT2_StartPlayback(void)
 {
-	stopMusic();
+	FT2_StopMusic();
 	song.pattDelTime = song.pattDelTime2 = 0; // 8bb: added these
 	setPos(0, 0);
 	startMusic();
 }
 
-void stopPlaying(void)
+void FT2_StopPlayback(void)
 {
-	stopMusic();
+	FT2_StopMusic();
 	stopVoices();
 }
 
@@ -1138,9 +1138,9 @@ void updateReplayRate(void)
  *        INITIALIZATION ROUTINES                                          *
  ***************************************************************************/
 
-bool initMusic(int32_t audioFrequency, int32_t audioBufferSize, bool interpolation, bool volumeRamping)
+bool FT2_InitMusic(int32_t audioFrequency, int32_t audioBufferSize, bool interpolation, bool volumeRamping)
 {
-	freeMusic();
+	IT_FreeMusic();
 	memset(stm, 0, sizeof (stm));
 
 	realReplayRate = CLAMP(audioFrequency, 8000, 96000);

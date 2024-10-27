@@ -1366,7 +1366,7 @@ void InitCommandT(hostChn_t *hc)
 	if (CmdVal >= 0x20)
 	{
 		Song.Tempo = CmdVal;
-		Music_InitTempo();
+		IT_InitMusicTempo();
 		InitNoCommand(hc);
 	}
 	else

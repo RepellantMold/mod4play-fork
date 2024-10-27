@@ -42,7 +42,7 @@ static int8_t GetModuleType(MEMFILE *m) // 8bb: added this
 	return Format;
 }
 
-bool Music_LoadFromData(uint8_t *Data, uint32_t DataLen)
+bool IT_LoadMusicfromData(uint8_t *Data, uint32_t DataLen)
 {
 	bool WasCompressed = false;
 	if (DataLen >= 4+4) // find out if module is MMCMP compressed
@@ -69,7 +69,7 @@ bool Music_LoadFromData(uint8_t *Data, uint32_t DataLen)
 	}
 	else
 	{
-		Music_FreeSong();
+		IT_FreeMusic();
 	}
 
 	bool WasLoaded = false;
@@ -100,7 +100,7 @@ bool Music_LoadFromData(uint8_t *Data, uint32_t DataLen)
 	}
 	else
 	{
-		Music_FreeSong();
+		IT_FreeMusic();
 
 		Song.Loaded = false;
 		return false;

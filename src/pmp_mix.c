@@ -245,7 +245,7 @@ static void mix_SaveIPVolumes(void)
 	}
 }
 
-void mix_UpdateBuffer(int16_t *buffer, int32_t numSamples)
+void FT2_MixAudio(int16_t *buffer, int32_t numSamples)
 {
 	if (numSamples <= 0)
 		return;
@@ -312,7 +312,7 @@ void mix_UpdateBuffer(int16_t *buffer, int32_t numSamples)
 	}
 }
 
-void mix_UpdateBufferFloat(float *buffer, int32_t numSamples)
+void FT2_MixAudioFloat(float *buffer, int32_t numSamples)
 {
 	if (numSamples <= 0)
 		return;

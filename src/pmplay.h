@@ -129,11 +129,11 @@ extern stmTyp stm[32];
 
 #define CLAMP(x, low, high) (((x) > (high)) ? (high) : (((x) < (low)) ? (low) : (x)))
 
-bool initMusic(int32_t audioFrequency, int32_t audioBufferSize, bool interpolation, bool volumeRamping);
-bool loadMusicFromData(const uint8_t *data, uint32_t dataLength); // .XM/.MOD/.FT
-void freeMusic(void);
+bool FT2_InitMusic(int32_t audioFrequency, int32_t audioBufferSize, bool interpolation, bool volumeRamping);
+bool FT2_LoadMusicfromData(const uint8_t *data, uint32_t dataLength); // .XM/.MOD/.FT
+void IT_FreeMusic(void);
 bool startMusic(void);
-void stopMusic();
+void FT2_StopMusic();
 void pauseMusic(void);
 void resumeMusic(void);
 void setMasterVol(int32_t v); // 0..256
@@ -141,8 +141,8 @@ void setAmp(int32_t level); // 1..32
 void setPos(int32_t pos, int32_t row); // input of -1 = don't change
 void stopVoices(void);
 void updateReplayRate(void);
-void startPlaying(void);
-void stopPlaying(void);
+void FT2_StartPlayback(void);
+void FT2_StopPlayback(void);
 
 // 8bb: added these three, handy
 int32_t getMasterVol(void);

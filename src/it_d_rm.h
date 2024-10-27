@@ -29,5 +29,5 @@ void mseek(MEMFILE *buf, size_t offset, int32_t whence);
 bool ReadBytes(MEMFILE *m, void *dst, uint32_t num);
 // -------------------------------------------------------
 
-bool Music_LoadFromData(uint8_t *Data, uint32_t DataLen);
-void Music_FreeSong(void);
+bool IT_LoadMusicfromData(uint8_t *Data, uint32_t DataLen);
+void IT_FreeMusic(void);
