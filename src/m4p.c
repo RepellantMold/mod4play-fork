@@ -2,24 +2,24 @@
 #include <string.h>
 
 // IT/S3M
-extern bool Music_Init(int32_t mixingFrequency, int32_t mixingBufferSize);
-extern bool Music_LoadFromData(uint8_t *Data, uint32_t DataLen);
-extern void Music_PlaySong(uint16_t order);
-extern void Music_FillAudioBuffer(int16_t *buffer, int32_t numSamples);
-extern void Music_FillAudioBufferFloat(float *buffer, int32_t numSamples);
-extern void Music_Close(void);
-extern void Music_Stop(void);
-extern void Music_FreeSong(void);
+extern bool IT_InitMusic(int32_t mixingFrequency, int32_t mixingBufferSize);
+extern bool IT_LoadMusicfromData(uint8_t *Data, uint32_t DataLen);
+extern void IT_PlaySong(uint16_t order);
+extern void IT_MixAudio(int16_t *buffer, int32_t numSamples);
+extern void IT_MixAudioFloat(float *buffer, int32_t numSamples);
+extern void IT_CloseDriver(void);
+extern void IT_StopPlayback(void);
+extern void IT_FreeMusic(void);
 
 // XM/MOD/FT
-extern bool initMusic(int32_t audioFrequency, int32_t audioBufferSize, bool interpolation, bool volumeRamping);
-extern bool loadMusicFromData(const uint8_t *data, uint32_t dataLength);
-extern void startPlaying(void);
-extern void stopPlaying(void);
-extern void mix_UpdateBuffer(int16_t *buffer, int32_t numSamples);
-extern void mix_UpdateBufferFloat(float *buffer, int32_t numSamples);
-extern void stopMusic();
-extern void freeMusic(void);
+extern bool FT2_InitMusic(int32_t audioFrequency, int32_t audioBufferSize, bool interpolation, bool volumeRamping);
+extern bool FT2_LoadMusicfromData(const uint8_t *data, uint32_t dataLength);
+extern void FT2_StartPlayback(void);
+extern void FT2_StopPlayback(void);
+extern void FT2_MixAudio(int16_t *buffer, int32_t numSamples);
+extern void FT2_MixAudioFloat(float *buffer, int32_t numSamples);
+extern void FT2_StopMusic();
+extern void FT2_FreeMusic(void);
 
 extern const char *MODSig[16]; // For format checking
 
@@ -74,15 +74,15 @@ bool m4p_LoadFromData(uint8_t *Data, uint32_t DataLen, int32_t mixingFrequency, 
 
 	if (current_format == FORMAT_IT_S3M)
 	{
-		if (Music_Init(mixingFrequency, mixingBufferSize))
-			return Music_LoadFromData(Data, DataLen);
+		if (IT_InitMusic(mixingFrequency, mixingBufferSize))
+			return IT_LoadMusicfromData(Data, DataLen);
 		else
 			return false;
 	}
 	else if (current_format == FORMAT_XM_MOD)
 	{
-		if (initMusic(mixingFrequency, mixingBufferSize, true, true))
-			return loadMusicFromData(Data, DataLen);
+		if (FT2_InitMusic(mixingFrequency, mixingBufferSize, true, true))
+			return FT2_LoadMusicfromData(Data, DataLen);
 		else
 			return false;
 	}
@@ -93,47 +93,47 @@ bool m4p_LoadFromData(uint8_t *Data, uint32_t DataLen, int32_t mixingFrequency, 
 void m4p_PlaySong(void)
 {
 	if (current_format == FORMAT_IT_S3M)
-		Music_PlaySong(0);
+		IT_PlaySong(0);
 	else
-		startPlaying();	
+		FT2_StartPlayback();	
 }
 
 void m4p_GenerateSamples(int16_t *buffer, int32_t numSamples)
 {
 	if (current_format == FORMAT_IT_S3M)
-		Music_FillAudioBuffer(buffer, numSamples);
+		IT_MixAudio(buffer, numSamples);
 	else
-		mix_UpdateBuffer(buffer, numSamples);
+		FT2_MixAudio(buffer, numSamples);
 }
 
 void m4p_GenerateFloatSamples(float *buffer, int32_t numSamples)
 {
 	if (current_format == FORMAT_IT_S3M)
-		Music_FillAudioBufferFloat(buffer, numSamples);
+		IT_MixAudioFloat(buffer, numSamples);
 	else
-		mix_UpdateBufferFloat(buffer, numSamples);
+		FT2_MixAudioFloat(buffer, numSamples);
 }
 
 void m4p_Stop(void)
 {
 	if (current_format == FORMAT_IT_S3M)
-		Music_Stop();
+		IT_StopPlayback();
 	else
-		stopPlaying();
+		FT2_StopPlayback();
 }
 
 void m4p_Close(void)
 {
 	if (current_format == FORMAT_IT_S3M)
-		Music_Close();
+		IT_CloseDriver();
 	else
-		stopMusic();
+		FT2_StopMusic();
 }
 
 void m4p_FreeSong(void)
 {
 	if (current_format == FORMAT_IT_S3M)
-		Music_FreeSong();
+		IT_FreeMusic();
 	else
-		freeMusic();
+		FT2_FreeMusic();
 }
